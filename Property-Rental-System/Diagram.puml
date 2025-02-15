@@ -1,0 +1,192 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 300
+
+' Define all classes with their attributes
+class coins {
+  + id : VARCHAR(255) <<PK>>
+  - ath : DOUBLE
+  - ath_change_percentage : DOUBLE
+  - ath_date : DATETIME
+  - atl : DOUBLE
+  - atl_change_percentage : DOUBLE
+  - atl_date : DATETIME
+  - circulating_supply : BIGINT
+  - current_price : DOUBLE
+  - fully_diluted_valuation : BIGINT
+  - high24h : DOUBLE
+  - image : VARCHAR(255)
+  - last_updated : DATETIME
+  - low24h : DOUBLE
+  - market_cap : BIGINT
+  - market_cap_change24h : BIGINT
+  - market_cap_change_percentage24h : DOUBLE
+  - market_cap_rank : INT
+  - max_supply : BIGINT
+  - name : VARCHAR(255)
+  - price_change24h : DOUBLE
+  - price_change_percentage24h : DOUBLE
+  - roi : VARCHAR(255)
+  - symbol : VARCHAR(255)
+  - total_supply : BIGINT
+  - total_volume : BIGINT
+}
+
+class user {
+  + id : BIGINT <<PK>>
+  - email : VARCHAR(255)
+  - full_name : VARCHAR(255)
+  - is_verified : BIT
+  - mobile : VARCHAR(255)
+  - password : VARCHAR(255)
+  - picture : VARCHAR(255)
+  - role : TINYINT
+  - status : TINYINT
+  - is_enabled : BIT
+  - send_to : TINYINT
+}
+
+class asset {
+  + id : BIGINT <<PK>>
+  - buy_price : DOUBLE
+  - quantity : DOUBLE
+  - coin_id : VARCHAR(255)
+  - user_id : BIGINT
+}
+
+class forgot_password_token {
+  + id : VARCHAR(255) <<PK>>
+  - otp : VARCHAR(255)
+  - send_to : VARCHAR(255)
+  - verification_type : TINYINT
+  - user_id : BIGINT
+}
+
+class orders {
+  + id : BIGINT <<PK>>
+  - order_type : STRING
+  - price : DECIMAL(38,2)
+  - status : STRING
+  - timestamp : DATETIME
+  - user_id : BIGINT
+}
+
+class order_item {
+  + id : BIGINT <<PK>>
+  - buy_price : DOUBLE
+  - quantity : DOUBLE
+  - sell_price : DOUBLE
+  - coin_id : VARCHAR(255)
+  - order_id : BIGINT
+}
+
+class payment_details {
+  + id : BIGINT <<PK>>
+  - account_holder_name : VARCHAR(255)
+  - account_number : VARCHAR(255)
+  - bank_name : VARCHAR(255)
+  - ifsc : VARCHAR(255)
+  - user_id : BIGINT
+}
+
+class payment_order {
+  + id : BIGINT <<PK>>
+  - amount : BIGINT
+  - payment_method : TINYINT
+  - status : TINYINT
+  - user_id : BIGINT
+}
+
+class trading_history {
+  + id : BIGINT <<PK>>
+  - buying_price : DOUBLE
+  - selling_price : DOUBLE
+  - user_id : BIGINT
+}
+
+class two_factorotp {
+  + id : VARCHAR(255) <<PK>>
+  - jwt : VARCHAR(255)
+  - otp : VARCHAR(255)
+  - user_id : BIGINT
+}
+
+class verification_code {
+  + id : BIGINT <<PK>>
+  - email : VARCHAR(255)
+  - mobile : VARCHAR(255)
+  - otp : VARCHAR(255)
+  - verification_type : TINYINT
+  - user_id : BIGINT
+}
+
+class wallets {
+  + id : BIGINT <<PK>>
+  - balance : DECIMAL(38,2)
+  - user_id : BIGINT
+}
+
+class wallet_transaction {
+  + id : BIGINT <<PK>>
+  - amount : BIGINT
+  - date : DATE
+  - purpose : VARCHAR(255)
+  - transfer_id : VARCHAR(255)
+  - type : TINYINT
+  - wallet_id : BIGINT
+}
+
+class watchlist {
+  + id : BIGINT <<PK>>
+  - user_id : BIGINT
+}
+
+class watchlist_coins {
+  - watchlist_id : BIGINT
+  - coins_id : VARCHAR(255)
+}
+
+class withdrawal {
+  + id : BIGINT <<PK>>
+  - amount : BIGINT
+  - date : DATETIME
+  - status : TINYINT
+  - user_id : BIGINT
+}
+
+' Define relationships
+asset --> user : user_id
+asset --> coins : coin_id
+
+forgot_password_token --> user : user_id
+
+orders --> user : user_id
+
+order_item --> orders : order_id
+order_item --> coins : coin_id
+
+payment_details --> user : user_id
+
+payment_order --> user : user_id
+
+trading_history --> user : user_id
+
+two_factorotp --> user : user_id
+
+verification_code --> user : user_id
+
+wallets --> user : user_id
+
+wallet_transaction --> wallets : wallet_id
+
+watchlist --> user : user_id
+
+watchlist_coins --> watchlist : watchlist_id
+watchlist_coins --> coins : coins_id
+
+withdrawal --> user : user_id
+
+@enduml
