@@ -1,0 +1,29 @@
+@startuml
+|Tenant|
+start
+:View Properties;
+if (Is Registered?) then (yes)
+  :Select Property;
+  :Submit Booking Request;
+else (no)
+  :Register;
+  :Complete Registration;
+  :Select Property;
+  :Submit Booking Request;
+endif
+|Landlord|
+:Review Booking;
+if (Approve Booking?) then (yes)
+  |Tenant|
+  :Receive Approval;
+  :Make Payment;
+  |Payment System|
+  :Process Payment;
+  |Tenant|
+  :Receive Payment Confirmation;
+else (no)
+  |Tenant|
+  :Receive Rejection;
+endif
+stop
+@enduml

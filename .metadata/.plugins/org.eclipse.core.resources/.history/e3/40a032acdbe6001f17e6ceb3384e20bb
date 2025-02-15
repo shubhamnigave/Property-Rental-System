@@ -1,0 +1,21 @@
+@startuml
+actor Tenant
+actor Landlord
+actor Admin
+entity "User Database" as UserDB
+entity "Property Database" as PropertyDB
+entity "Booking Database" as BookingDB
+entity "Payment System" as PaymentSystem
+entity "Report Generation" as Reports
+
+Tenant -> "System" : Login/Register, View Properties, Book Property, Pay
+Landlord -> "System" : Login/Register, Manage Property, Approve/Reject Booking, View Payments
+Admin -> "System" : Login, User/Property/Booking Management, Reports
+
+"System" -> UserDB : User Data (Login/Register)
+"System" -> PropertyDB : Property Data (Manage/View)
+"System" -> BookingDB : Booking Data (Create, Approve/Reject, View)
+"System" -> PaymentSystem : Payment Data (Process)
+"System" -> Reports : Generate Reports
+
+@enduml

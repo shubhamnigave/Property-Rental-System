@@ -1,0 +1,41 @@
+@startuml
+actor Tenant
+participant BookingController
+participant BookingService
+participant BookingRepository
+participant Booking
+participant PaymentController
+participant PaymentService
+participant PaymentRepository
+
+Tenant -> BookingController: POST /bookings/create (Booking)
+BookingController -> BookingService: createBooking(Booking)
+BookingService -> BookingRepository: save(Booking)
+BookingService -> PaymentController: Initiate Payment (Booking)
+PaymentController -> PaymentService: createPaymentIntent(BookingId, amount)
+PaymentService -> PaymentRepository: save(Payment)
+PaymentService -> PaymentController: Return PaymentIntent clientSecret
+PaymentController -> BookingController: Return payment confirmation (clientSecret)
+BookingController -> Tenant: Return booking and payment confirmation
+
+== Approve Booking ==
+
+actor Landlord
+Landlord -> BookingController: PUT /bookings/approve/{bookingId}
+BookingController -> BookingService: updateBookingStatus(bookingId, BookingStatus.APPROVED)
+BookingService -> BookingRepository: updateStatus(BookingStatus.APPROVED)
+BookingService -> PaymentController: Call Payment Update after Approval (BookingId)
+PaymentController -> PaymentService: updatePaymentStatus(transactionId)
+PaymentService -> PaymentRepository: updateStatus(PaymentStatus.COMPLETED)
+PaymentService -> PaymentController: Payment Updated
+BookingService -> BookingController: Return success message
+BookingController -> Landlord: Return success message "Booking Approved Successfully"
+
+== Reject Booking ==
+
+Landlord -> BookingController: PUT /bookings/{bookingId}/reject
+BookingController -> BookingService: updateBookingStatus(bookingId, BookingStatus.REJECTED)
+BookingService -> BookingRepository: updateStatus(BookingStatus.REJECTED)
+BookingService -> BookingController: Return success message
+BookingController -> Landlord: Return success message "Booking Rejected Successfully"
+@enduml
