@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 🏡 Property Rental System
 📌 Overview
 The Property Rental System is a full-stack web application designed to streamline property rentals. It allows landlords to list properties, manage bookings, and handle payments, while tenants can search, book, and review properties. The system supports role-based access control for Landlords, Tenants, and Admins.
@@ -127,4 +127,4 @@ http://localhost:8081/swagger-ui/index.html
 
 ## 📄 License
 This project is licensed under the **MIT License**.
->>>>>>> 120529b (read me updated)
+
